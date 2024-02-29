@@ -1,12 +1,12 @@
 import base64
 from selenium import webdriver
 from selenium_stealth import stealth
+from selenium_stealth.execute_cdp_cmd import execute_cdp_cmd
 import math
 import imghdr
 import pytest
 import time
 import os
-
 
 @pytest.fixture
 def browser_data():
@@ -41,11 +41,11 @@ def browser_data():
     driver.get(url)
     time.sleep(10)
 
-    metrics = driver.execute_cdp_cmd('Page.getLayoutMetrics', {})
+    metrics = execute_cdp_cmd(driver, 'Page.getLayoutMetrics', {})
     width = math.ceil(metrics['contentSize']['width'])
     height = math.ceil(metrics['contentSize']['height'])
     screenOrientation = dict(angle=0, type='portraitPrimary')
-    driver.execute_cdp_cmd('Emulation.setDeviceMetricsOverride', {
+    execute_cdp_cmd(driver, 'Emulation.setDeviceMetricsOverride', {
         'mobile': False,
         'width': width,
         'height': height,
@@ -57,7 +57,7 @@ def browser_data():
     if clip:
         opt['clip'] = clip
 
-    result = driver.execute_cdp_cmd('Page.captureScreenshot', opt)
+    result = execute_cdp_cmd(driver, 'Page.captureScreenshot', opt)
     html = driver.page_source
     driver.quit()
     return html, result
