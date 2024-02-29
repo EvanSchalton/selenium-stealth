@@ -1,4 +1,4 @@
-from selenium.webdriver import Chrome as Driver
+from selenium.webdriver import Chrome as Driver, WebDriver
 
 from .chrome_app import chrome_app
 from .chrome_runtime import chrome_runtime
@@ -37,7 +37,7 @@ def stealth(driver: Driver, user_agent: str = None,
             renderer: str = "Intel Iris OpenGL Engine",
             fix_hairline: bool = False,
             run_on_insecure_origins: bool = False, **kwargs) -> None:
-    if not isinstance(driver, Driver):
+    if not isinstance(driver, (Driver, WebDriver)):
         raise ValueError("driver must is selenium.webdriver.Chrome, currently this lib only support Chrome")
 
     ua_languages = ','.join(languages)
